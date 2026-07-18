@@ -1,4 +1,5 @@
 import 'package:ecom_app/domain/product.model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProductsRepository {
   final List<Product> products = [
@@ -39,3 +40,5 @@ class ProductsRepository {
     return result;
   }
 }
+
+final productsRepositoryProvider = Provider((ref) => ProductsRepository());
