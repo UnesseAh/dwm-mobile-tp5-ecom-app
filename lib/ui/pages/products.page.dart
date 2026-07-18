@@ -6,8 +6,11 @@ class ProductsPage extends ConsumerWidget {
   const ProductsPage({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final allProducts = ref.watch(allProductsProvider);
-    TextEditingController searchProductsController = TextEditingController();
+    final allProducts = ref.watch(searchProductsProvider);
+    final keyword = ref.watch(searchKeyWordStateProvider);
+    TextEditingController searchProductsController = TextEditingController(
+      text: keyword,
+    );
     return Scaffold(
       appBar: AppBar(),
       body: SafeArea(
@@ -28,7 +31,13 @@ class ProductsPage extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+                  IconButton(
+                    onPressed: () {
+                      String kw = searchProductsController.text;
+                      ref.read(searchKeyWordStateProvider.notifier).state = kw;
+                    },
+                    icon: Icon(Icons.search),
+                  ),
                 ],
               ),
             ),
