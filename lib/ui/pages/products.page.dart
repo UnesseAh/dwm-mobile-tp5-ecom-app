@@ -1,4 +1,6 @@
 import 'package:ecom_app/application/products.providers.dart';
+import 'package:ecom_app/application/providers/card.provider.dart';
+import 'package:ecom_app/ui/pages/card.product.page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,11 +10,25 @@ class ProductsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final allProducts = ref.watch(searchProductsProvider);
     final keyword = ref.watch(searchKeyWordStateProvider);
+    final card = ref.watch(cardProvider);
     TextEditingController searchProductsController = TextEditingController(
       text: keyword,
     );
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text("Products"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CardPage()),
+              );
+            },
+            icon: Icon(Icons.shopping_cart),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -22,6 +38,10 @@ class ProductsPage extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: TextFormField(
+                      onFieldSubmitted: (value) {
+                        ref.read(searchKeyWordStateProvider.notifier).state =
+                            value;
+                      },
                       controller: searchProductsController,
                       decoration: InputDecoration(
                         hintText: "Product name search",
@@ -58,10 +78,24 @@ class ProductsPage extends ConsumerWidget {
                                 Text("${allProducts[index].id}"),
                                 Text("${allProducts[index].name} MAD"),
                                 Text("${allProducts[index].price} Units"),
-                                TextButton(
-                                  onPressed: () {},
-                                  child: Text("Add To Card"),
-                                ),
+                                if (!card.contains(allProducts[index]))
+                                  TextButton(
+                                    onPressed: () {
+                                      ref
+                                          .read(cardProvider.notifier)
+                                          .addProduct(allProducts[index]);
+                                    },
+                                    child: Text("Add To Card"),
+                                  )
+                                else
+                                  TextButton(
+                                    onPressed: () {
+                                      ref
+                                          .read(cardProvider.notifier)
+                                          .removeProduct(allProducts[index]);
+                                    },
+                                    child: Text("Remove From Card"),
+                                  ),
                               ],
                             ),
                           ],
