@@ -27,4 +27,15 @@ class ProductsRepository {
       selected: false,
     ),
   ];
+
+  List<Product> getAllProducts() {
+    return products;
+  }
+
+  List<Product> searchProducts(String keyword) {
+    final result = products
+        .where((p) => p.name.toLowerCase().contains(keyword.toLowerCase()))
+        .toList();
+    return result;
+  }
 }
