@@ -7,30 +7,56 @@ class ProductsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final allProducts = ref.watch(allProductsProvider);
+    TextEditingController searchProductsController = TextEditingController();
     return Scaffold(
       appBar: AppBar(),
       body: SafeArea(
         child: Column(
           children: [
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: searchProductsController,
+                      decoration: InputDecoration(
+                        hintText: "Product name search",
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(width: 1),
+                        ),
+                      ),
+                    ),
+                  ),
+                  IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+                ],
+              ),
+            ),
             Expanded(
               child: ListView.separated(
                 itemBuilder: (context, index) => ListTile(
                   title: Card.outlined(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Image.asset(allProducts[index].photo, width: 150),
-                          VerticalDivider(),
-                          Column(
-                            children: [
-                              Text("${allProducts[index].id}"),
-                              Text("${allProducts[index].id}"),
-                              Text("${allProducts[index].id}"),
-                            ],
-                          ),
-                        ],
+                    child: IntrinsicHeight(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Image.asset(allProducts[index].photo, width: 150),
+                            VerticalDivider(width: 1),
+                            Column(
+                              children: [
+                                Text("${allProducts[index].id}"),
+                                Text("${allProducts[index].name} MAD"),
+                                Text("${allProducts[index].price} Units"),
+                                TextButton(
+                                  onPressed: () {},
+                                  child: Text("Add To Card"),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
